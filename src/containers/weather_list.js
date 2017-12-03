@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
+import _ from 'lodash';
 import PropTypes from 'prop-types';
 import { withStyles } from 'material-ui/styles';
 import Table, {
@@ -21,10 +21,14 @@ import Tooltip from 'material-ui/Tooltip';
 import DeleteIcon from 'material-ui-icons/Delete';
 import FilterListIcon from 'material-ui-icons/FilterList';
 
-import { Sparklines, SparklinesLine } from 'react-sparklines';
+import {
+  Sparklines,
+  SparklinesLine,
+  SparklinesReferenceLine
+} from 'react-sparklines';
 
 import charts from '../components/chart';
-
+import GoogleMap from '../components/google_map';
 const styles = theme => ({
   spacer: {
     flex: '1 1 100%'
@@ -58,13 +62,26 @@ const columnData = [
     id: 'Temperature',
     numeric: true,
     disablePadding: false,
-    label: 'Temperature'
+    label: 'Temperature (K)'
   },
-  { id: 'Pressure', numeric: true, disablePadding: false, label: 'Pressure' },
-  { id: 'Humidity', numeric: true, disablePadding: false, label: 'Humidity' }
+  {
+    id: 'Pressure',
+    numeric: true,
+    disablePadding: false,
+    label: 'Pressure (HPa)'
+  },
+  {
+    id: 'Humidity',
+    numeric: true,
+    disablePadding: false,
+    label: 'Humidity (%)'
+  }
 ];
 
-@withStyles(styles)
+const average = data => {
+  return _.round(_.sum(data) / data.length);
+};
+
 class WeatherList extends Component {
   static propTypes = {
     numSelected: PropTypes.number.isRequired,
@@ -82,7 +99,10 @@ class WeatherList extends Component {
     return this.props.weather.map(data => {
       return (
         <TableRow key={data.city.id}>
-          <TableCell>{data.city.name} </TableCell>
+          <TableCell>
+            {data.city.name}
+            <GoogleMap lon={data.city.coord.lon} lat={data.city.coord.lat} />
+          </TableCell>
           <TableCell>
             <Sparklines
               data={data.list.map(weather => {
@@ -90,6 +110,7 @@ class WeatherList extends Component {
               })}
             >
               <SparklinesLine color="blue" />
+              <SparklinesReferenceLine type="avg" />
             </Sparklines>
           </TableCell>
 
@@ -100,6 +121,7 @@ class WeatherList extends Component {
               })}
             >
               <SparklinesLine color="green" />
+              <SparklinesReferenceLine type="avg" />
             </Sparklines>
           </TableCell>
           <TableCell>
@@ -109,6 +131,7 @@ class WeatherList extends Component {
               })}
             >
               <SparklinesLine color="#56b45d" />
+              <SparklinesReferenceLine type="avg" />
             </Sparklines>
           </TableCell>
 
@@ -131,7 +154,7 @@ class WeatherList extends Component {
       <Paper>
         <Table className={classes.table}>
           <TableHead>
-            <TableRow>
+            <TableRow hover>
               {columnData.map(column => {
                 return (
                   <TableCell key={column.id} numeric={column.numeric}>
@@ -160,4 +183,4 @@ const mapStateToProps = state => {
 };
 
 //export default withStyles(styles)(WeatherList);
-export default connect(mapStateToProps)(WeatherList);
+export default connect(mapStateToProps)(withStyles(styles)(WeatherList));
