@@ -1,6 +1,6 @@
 # ReduxCityApp
 
-This is a modification on top of  StephenGrider Redux Course [GitHub](https://github.com/StephenGrider/ReduxSimpleStarter)
+This is a modification on top of  StephenGrider Redux Course [Original](https://github.com/StephenGrider/ReduxSimpleStarter)
 
 ### Getting Started
 
@@ -11,7 +11,7 @@ Checkout this repo, install dependencies, then start the gulp process with the f
 
 ```
 > git clone https://github.com/kuppakoffe/ReduxCityApp.git
-> cd ReduxSimpleStarter
+> cd ReduxCityApp
 > yarn 
 > yarn start
 ```
