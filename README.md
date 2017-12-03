@@ -17,5 +17,5 @@ Checkout this repo, install dependencies, then start the gulp process with the f
 ```
 
 
-![ReduxCityApp](ReduxCityApp/reduxCityApp.png)
+![ReduxCityApp](reduxCityApp.png)
 
